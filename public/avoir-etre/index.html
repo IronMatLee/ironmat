@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Jeu Avoir et Être - Menu Principal</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- HEADER -->
+        <header class="home-header">
+            <img src="img/Pokébat.webp" class="header-avatar" alt="Pokébat">
+            <div class="header-titles">
+                <h1 class="pokemon-title">Les verbes Avoir et Être</h1>
+                <h2>Choisis ton entraînement !</h2>
+            </div>
+        </header>
+
+        <!-- MENU PRINCIPAL -->
+        <section id="menu" class="screen active">
+            <div class="menu-cards">
+                <div class="card" onclick="window.location.href='exercice1.html'">
+                    <div class="card-icon">1</div>
+                    <h3>Le Tableau de Conjugaison</h3>
+                    <p>Range les étiquettes à la bonne place dans le tableau.</p>
+                </div>
+                <div class="card" onclick="window.location.href='exercice2.html'">
+                    <div class="card-icon">2</div>
+                    <h3>Le Texte à Trous</h3>
+                    <p>Complète les phrases avec le bon verbe.</p>
+                </div>
+                <div class="card" onclick="window.location.href='exercice3.html'">
+                    <div class="card-icon">3</div>
+                    <h3>Où est le sujet ?</h3>
+                    <p>Trouve le bon sujet pour la phrase conjuguée.</p>
+                </div>
+            </div>
+            
+            <div class="home-leaderboard-section">
+                <div class="leaderboard-card" style="width: 100%;">
+                    <div class="leaderboard-card-header">
+                        <h3>🏆 Classement Mondial</h3>
+                        <div id="home-rank-display" class="home-rank-info">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                    <div class="leaderboard-card-content">
+                        <img src="img/Pokébat.webp" class="leaderboard-illustration" alt="Illustration Pokébat">
+                        <div class="leaderboard-container" style="height: auto; margin-bottom: 0; border: none; border-radius: 0; box-shadow: none;">
+                            <div class="leaderboard-list" id="home-leaderboard">
+                                <!-- Loaded via JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="version-number">v1.11</div>
+    </div>
+
+    <!-- JS -->
+    <script src="js/shared.js"></script>
+</body>
+</html>

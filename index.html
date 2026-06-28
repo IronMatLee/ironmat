@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Le Labo d'Ironmat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="background-elements">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+    </div>
+    
+    <div id="app">
+      <header>
+        <h1>Le Labo d'Ironmat</h1>
+        <p>Un espace pour centraliser mes projets, jeux et expérimentations.</p>
+      </header>
+
+      <nav class="filters" id="filters">
+        <button class="filter-btn active" data-filter="all">Tous</button>
+        <button class="filter-btn" data-filter="scolaire">Jeux Scolaires</button>
+        <button class="filter-btn" data-filter="classique">Jeux Classiques</button>
+        <button class="filter-btn" data-filter="test">Tests & Labo</button>
+      </nav>
+
+      <main>
+        <div class="projects-grid" id="projects-grid">
+          <!-- Les projets seront injectés ici par main.js -->
+        </div>
+      </main>
+
+      <footer>
+        <p>© 2026 Ironmat. Créé avec ❤️</p>
+      </footer>
+    </div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

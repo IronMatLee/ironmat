@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Les 12 Mois de Baptiste</title>
+
+    <!-- PWA Setup -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#4a90e2" />
+
+    <!-- Libs -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Fredoka:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+      :root {
+        --winter-bg: #e3f2fd;
+        --winter-color: #1565c0;
+        --spring-bg: #e8f5e9;
+        --spring-color: #2e7d32;
+        --summer-bg: #ffebee;
+        --summer-color: #c62828;
+        --autumn-bg: #fff3e0;
+        --autumn-color: #ef6c00;
+        --neutral: #f0f2f5;
+        --text: #2c3e50;
+      }
+
+      body {
+        font-family: "Fredoka", sans-serif;
+        background-color: var(--neutral);
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* --- Header --- */
+      header {
+        background: white;
+        padding: 10px 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 10;
+        flex-shrink: 0;
+      }
+
+      h1 {
+        font-family: "Caveat", cursive;
+        margin: 0;
+        font-size: 1.8rem;
+        color: var(--text);
+      }
+
+      .score-box {
+        background: #ffecb3;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-weight: bold;
+        color: #d35400;
+        font-size: 1.2rem;
+      }
+
+      /* --- Menu --- */
+      #menu-screen {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        overflow-y: auto;
+        padding: 20px;
+      }
+
+      .menu-btn {
+        background: white;
+        border: none;
+        padding: 15px 20px;
+        width: 90%;
+        max-width: 400px;
+        border-radius: 20px;
+        font-size: 1.3rem;
+        font-family: "Fredoka", sans-serif;
+        color: var(--text);
+        box-shadow: 0 4px 0 #bdc3c7;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: transform 0.1s;
+      }
+
+      .menu-btn:active {
+        transform: translateY(4px);
+        box-shadow: none;
+      }
+      .menu-btn i {
+        font-size: 1.8rem;
+        width: 40px;
+        text-align: center;
+      }
+
+      .btn-learn {
+        color: #27ae60;
+        border-left: 8px solid #27ae60;
+      }
+      .btn-order {
+        color: #3498db;
+        border-left: 8px solid #3498db;
+      }
+      .btn-color {
+        color: #e67e22;
+        border-left: 8px solid #e67e22;
+      }
+      .btn-write {
+        color: #9b59b6;
+        border-left: 8px solid #9b59b6;
+      }
+      .btn-quiz {
+        color: #e74c3c;
+        border-left: 8px solid #e74c3c;
+      }
+      .btn-birthday {
+        color: #e91e63;
+        border-left: 8px solid #e91e63;
+      }
+
+      /* --- Zone de Jeu --- */
+      #game-area {
+        flex: 1;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .instruction-bar {
+        width: 100%;
+        background: #fff;
+        padding: 15px 10px;
+        text-align: center;
+        font-size: 1.2rem;
+        color: #555;
+        border-bottom: 1px solid #eee;
+        flex-shrink: 0;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .scroll-container {
+        flex: 1;
+        width: 100%;
+        overflow-y: auto;
+        padding: 20px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 180px;
+      }
+
+      .months-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        width: 100%;
+        max-width: 800px;
+        align-content: start;
+      }
+
+      /* --- QUIZ LAYOUT --- */
+      .quiz-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        width: 100%;
+        max-width: 600px;
+        margin-top: 20px;
+      }
+
+      .quiz-option {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        box-shadow: 0 4px 0 #bdc3c7;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--text);
+        border: 2px solid transparent;
+        transition: transform 0.1s;
+      }
+
+      .quiz-option:active {
+        transform: translateY(4px);
+        box-shadow: none;
+      }
+      .quiz-option.correct {
+        background: #2ecc71;
+        color: white;
+        border-color: #27ae60;
+        box-shadow: 0 4px 0 #27ae60;
+      }
+      .quiz-option.wrong {
+        background: #e74c3c;
+        color: white;
+        border-color: #c0392b;
+        animation: shake 0.4s;
+      }
+
+      /* --- LAYOUT ORDRE & ANNIVERSAIRES --- */
+      .order-game-layout {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 900px;
+        gap: 20px;
+        height: 100%;
+      }
+
+      .slots-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        width: 100%;
+        flex-shrink: 0;
+      }
+
+      .slot-box {
+        background: rgba(255, 255, 255, 0.5);
+        border: 3px dashed #bdc3c7;
+        border-radius: 15px;
+        min-height: 100px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        overflow: hidden;
+      }
+
+      .slot-box::before {
+        content: attr(data-label);
+        position: absolute;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #e0e0e0;
+        z-index: 0;
+        line-height: 1;
+        width: 100%;
+        word-wrap: break-word;
+      }
+
+      .slot-box.number-bg::before {
+        font-size: 3rem;
+      }
+
+      .pool-container {
+        background: #e8eaf6;
+        border-radius: 15px;
+        padding: 15px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        max-height: 300px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        border: 1px solid #d0d3d4;
+      }
+
+      .pool-container::-webkit-scrollbar {
+        width: 25px;
+      }
+      .pool-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 15px;
+      }
+      .pool-container::-webkit-scrollbar-thumb {
+        background: #bdc3c7;
+        border-radius: 15px;
+        border: 5px solid #f1f1f1;
+      }
+      .pool-container::-webkit-scrollbar-thumb:hover {
+        background: #a0a0a0;
+      }
+
+      /* --- CARTE MOIS --- */
+      .month-card {
+        background: white;
+        border-radius: 15px;
+        padding: 10px;
+        min-height: 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+        cursor: pointer;
+        border: 3px solid transparent;
+        position: relative;
+        z-index: 2;
+        touch-action: pan-y;
+        width: 100%;
+        box-sizing: border-box;
+        color: #555;
+      }
+
+      /* --- TOKEN ANNIVERSAIRE --- */
+      .birthday-token {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 4px solid white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        cursor: grab;
+        position: relative;
+        z-index: 2;
+        background: white;
+        /* Flex pour le fallback text */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-weight: bold;
+        font-size: 0.8rem;
+        color: #555;
+      }
+
+      .birthday-token img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .force-drag {
+        touch-action: none !important;
+      }
+
+      .month-card i,
+      .month-card svg {
+        font-size: 2rem;
+        height: 2rem;
+        width: 2rem;
+        margin-bottom: 5px;
+        color: inherit;
+        fill: currentColor;
+      }
+
+      .month-name {
+        font-size: 1rem;
+        font-weight: bold;
+        text-transform: capitalize;
+        pointer-events: none;
+      }
+
+      /* --- Styles Drag & Drop --- */
+      .sortable-chosen {
+        border: 3px solid #3498db !important;
+        transform: scale(1.05);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3) !important;
+        background: #e1f5fe !important;
+        z-index: 100;
+        opacity: 1 !important;
+      }
+      .sortable-ghost {
+        opacity: 0.3;
+        background: #ecf0f1 !important;
+        border: 2px dashed #bdc3c7 !important;
+      }
+
+      /* --- Styles Couleurs --- */
+      .style-winter {
+        background-color: var(--winter-bg) !important;
+        color: var(--winter-color) !important;
+        border-color: var(--winter-color) !important;
+      }
+      .style-spring {
+        background-color: var(--spring-bg) !important;
+        color: var(--spring-color) !important;
+        border-color: var(--spring-color) !important;
+      }
+      .style-summer {
+        background-color: var(--summer-bg) !important;
+        color: var(--summer-color) !important;
+        border-color: var(--summer-color) !important;
+      }
+      .style-autumn {
+        background-color: var(--autumn-bg) !important;
+        color: var(--autumn-color) !important;
+        border-color: var(--autumn-color) !important;
+      }
+
+      .color-mode-neutral {
+        background: white;
+        border: 3px dashed #ccc;
+        color: #ccc !important;
+      }
+
+      /* --- Mode Apprendre --- */
+      .learn-mode-card {
+        transition: transform 0.2s;
+      }
+      .learn-mode-card:active {
+        transform: scale(0.95);
+      }
+      .audio-hint {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        font-size: 0.8rem;
+        opacity: 0.5;
+      }
+
+      /* --- Jeu Écriture --- */
+      .input-month {
+        width: 90%;
+        padding: 5px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-family: "Fredoka", sans-serif;
+        font-size: 1rem;
+        text-align: center;
+        background: white;
+      }
+
+      .input-month.valid {
+        border-color: #2ecc71;
+        background-color: #eaffea;
+        color: #27ae60;
+        font-weight: bold;
+      }
+
+      .input-month.invalid {
+        border-color: #e74c3c;
+        background-color: #fceceb;
+        color: #c0392b;
+        animation: shake 0.4s;
+      }
+
+      /* --- Footer Tools --- */
+      .tools-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: white;
+        padding: 15px 15px max(60px, env(safe-area-inset-bottom)) 15px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.08);
+        z-index: 100;
+        box-sizing: border-box;
+        border-top: 1px solid #f0f0f0;
+      }
+
+      .tool-btn {
+        flex: 1;
+        max-width: 140px;
+        padding: 12px 0;
+        border-radius: 12px;
+        border: none;
+        font-weight: bold;
+        font-family: "Fredoka", sans-serif;
+        font-size: 1.1rem;
+        cursor: pointer;
+        opacity: 0.6;
+        transition: all 0.2s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        line-height: 1.1;
+      }
+
+      .tool-btn span {
+        font-size: 0.8rem;
+        margin-top: 4px;
+      }
+
+      .tool-btn.active {
+        opacity: 1;
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        border: 2px solid currentColor;
+      }
+
+      .btn-validate {
+        background: #27ae60 !important;
+        color: white !important;
+        opacity: 1;
+        box-shadow: 0 4px 0 #219150;
+      }
+      .btn-validate:active {
+        transform: translateY(4px);
+        box-shadow: none;
+      }
+
+      .btn-replay {
+        background: #3498db !important;
+        color: white !important;
+        opacity: 1;
+        box-shadow: 0 4px 0 #2980b9;
+      }
+      .btn-back {
+        background: #95a5a6;
+        color: white;
+        flex: 0 0 70px;
+      }
+
+      .btn-next {
+        background: #27ae60 !important;
+        color: white !important;
+        opacity: 1;
+        box-shadow: 0 4px 0 #219150;
+      }
+
+      .wrong {
+        animation: shake 0.4s;
+        border-color: #e74c3c !important;
+      }
+      .correct {
+        border-color: #2ecc71 !important;
+        transform: scale(1.05);
+      }
+
+      /* --- Version Tag --- */
+      .version-tag {
+        position: fixed;
+        bottom: 5px;
+        right: 5px;
+        font-size: 0.9rem;
+        color: #2c3e50;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 2px 6px;
+        border-radius: 4px;
+        z-index: 10000;
+        pointer-events: none;
+        font-family: sans-serif;
+        font-weight: bold;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
+      }
+
+      @media (max-width: 800px) {
+        .months-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .slots-container {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .pool-container {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .quiz-container {
+          grid-template-columns: 1fr;
+        }
+        h1 {
+          font-size: 1.5rem;
+        }
+        .tool-btn {
+          font-size: 0.9rem;
+          padding: 8px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="score-box" id="score-display">🌟 0</div>
+      <h1>Jeu de Baptiste</h1>
+    </header>
+
+    <!-- Menu Principal -->
+    <div id="menu-screen">
+      <button class="menu-btn btn-learn" onclick="startGame('learn')">
+        <i class="fa-solid fa-graduation-cap"></i>
+        Apprendre les mois
+      </button>
+      <button class="menu-btn btn-order" onclick="startGame('order')">
+        <i class="fa-solid fa-list-ol"></i>
+        Remettre dans l'ordre
+      </button>
+      <!-- MOIS MANQUANTS -->
+      <button class="menu-btn btn-write" onclick="startGame('write')">
+        <i class="fa-solid fa-keyboard"></i>
+        Mois manquants
+      </button>
+      <button class="menu-btn btn-color" onclick="startGame('color')">
+        <i class="fa-solid fa-palette"></i>
+        Couleurs des saisons
+      </button>
+      <button class="menu-btn btn-quiz" onclick="startGame('quiz')">
+        <i class="fa-solid fa-circle-question"></i>
+        Le Quiz des Mois
+      </button>
+      <!-- ANNIVERSAIRES -->
+      <button class="menu-btn btn-birthday" onclick="startGame('birthday')">
+        <i class="fa-solid fa-cake-candles"></i>
+        Les Anniversaires
+      </button>
+    </div>
+
+    <!-- Zone de Jeu -->
+    <div id="game-area">
+      <div class="instruction-bar" id="instruction-text">Consigne...</div>
+      <div class="scroll-container" id="scroll-container">
+        <div
+          id="game-content"
+          style="width: 100%; display: flex; justify-content: center"
+        ></div>
+      </div>
+    </div>
+
+    <!-- Barre d'outils -->
+    <div class="tools-bar" id="tools-bar" style="display: none"></div>
+
+    <!-- Tag de Version -->
+    <div class="version-tag">v2.9</div>
+
+    <script>
+      const pumpkinSVG = `<svg viewBox="0 0 512 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M256 160c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm224.9 69c-9-33.6-33.8-61.9-66.7-77.9-1.9-.9-5.1-.9-6.9 1-17.6 18.6-43.1 30.7-71.3 30.7-18.2 0-35.3-5.2-50.2-14.2-7.2-4.3-15-8.2-23.2-11.7 4.2-11.8 6.5-24.5 6.5-37.9 0-61.9-50.1-112-112-112S44 58.1 44 120c0 13.4 2.3 26.1 6.5 37.9-8.3 3.5-16 7.4-23.2 11.7C12.5 178.6 0 196.2 0 215c0 101.6 114.6 184 256 184s256-82.4 256-184c0-11-3.6-21.2-10.1-30zM256 352c-44.1 0-80-35.9-80-80s35.9-80 80-80 80 35.9 80 80-35.9 80-80 80z"/></svg>`;
+
+      const monthsData = [
+        {
+          id: 1,
+          name: "Janvier",
+          season: "winter",
+          icon: "fa-regular fa-snowflake",
+        },
+        {
+          id: 2,
+          name: "Février",
+          season: "winter",
+          icon: "fa-solid fa-person-skiing",
+        },
+        { id: 3, name: "Mars", season: "spring", icon: "fa-solid fa-seedling" },
+        { id: 4, name: "Avril", season: "spring", icon: "fa-solid fa-egg" },
+        { id: 5, name: "Mai", season: "spring", icon: "fa-solid fa-archway" },
+        { id: 6, name: "Juin", season: "summer", icon: "fa-solid fa-sun" },
+        {
+          id: 7,
+          name: "Juillet",
+          season: "summer",
+          icon: "fa-solid fa-umbrella-beach",
+        },
+        {
+          id: 8,
+          name: "Août",
+          season: "summer",
+          icon: "fa-solid fa-ice-cream",
+        },
+        {
+          id: 9,
+          name: "Septembre",
+          season: "autumn",
+          icon: "fa-solid fa-school",
+        },
+        { id: 10, name: "Octobre", season: "autumn", customSvg: pumpkinSVG },
+        {
+          id: 11,
+          name: "Novembre",
+          season: "autumn",
+          icon: "fa-solid fa-wind",
+        },
+        {
+          id: 12,
+          name: "Décembre",
+          season: "winter",
+          icon: "fa-solid fa-sleigh",
+        },
+      ];
+
+      // --- DONNÉES ANNIVERSAIRES ---
+      const birthdaysData = [
+        // Janvier
+        { name: "Papou", img: "img/Papou.jpg", monthId: 1 },
+        { name: "Papi", img: "img/Papi.jpg", monthId: 1 },
+        { name: "Mamie", img: "img/Mamie.jpg", monthId: 1 },
+        // Février
+        { name: "Manue", img: "img/Manue.jpg", monthId: 2 },
+        // Mars
+        { name: "Papa", img: "img/Papa.jpg", monthId: 3 },
+        // Avril
+        { name: "Nanou", img: "img/Nanou.jpg", monthId: 4 },
+        { name: "Pilou", img: "img/Pilou.jpg", monthId: 4 },
+        // Mai
+        { name: "Caro", img: "img/Caro.jpg", monthId: 5 },
+        // Juin
+        { name: "Maman", img: "img/Maman.jpg", monthId: 6 },
+        // Août (New)
+        { name: "Sacha", img: "img/Sacha.jpg", monthId: 8 },
+        // Septembre
+        { name: "Laure", img: "img/Laure.jpg", monthId: 9 },
+        { name: "Nana", img: "img/Nana.jpg", monthId: 9 },
+        // Octobre (New)
+        { name: "Tristan", img: "img/Tristan.jpg", monthId: 10 },
+        // Novembre
+        { name: "Baptiste", img: "img/Baptiste.jpg", monthId: 11 },
+        { name: "Cyprien", img: "img/Cyprien.jpg", monthId: 11 },
+        { name: "Basile", img: "img/Basile.jpg", monthId: 11 }, // New
+        // Décembre
+        { name: "Jésus", img: "img/Jesus.jpg", monthId: 12 },
+      ];
+
+      const seasons = {
+        winter: { name: "Hiver", color: "#1565c0", bg: "#e3f2fd" },
+        spring: { name: "Printemps", color: "#2e7d32", bg: "#e8f5e9" },
+        summer: { name: "Été", color: "#c62828", bg: "#ffebee" },
+        autumn: { name: "Automne", color: "#ef6c00", bg: "#fff3e0" },
+      };
+
+      const allQuizQuestions = [
+        { q: "Quel est le premier mois de l'année ?", a: 1 },
+        { q: "Quel est le dernier mois de l'année ?", a: 12 },
+        { q: "Quand fête-t-on Halloween ?", a: 10 },
+        { q: "En quel mois mange-t-on les œufs de Pâques ?", a: 4 },
+        { q: "Quand fête-t-on Noël ?", a: 12 },
+        { q: "Quel est le mois de naissance de Laure ?", a: 9 },
+        { q: "Quel est le mois de naissance de Baptiste ?", a: 11 },
+        { q: "Quel est le mois de naissance de Papa ?", a: 3 },
+        { q: "Quel est le mois de naissance de Maman ?", a: 6 },
+        { q: "Quand mange-t-on la Galette des Rois ?", a: 1 },
+        { q: "Quand mange-t-on des crêpes pour la Chandeleur ?", a: 2 },
+        { q: "Quand les amoureux fêtent-ils la Saint-Valentin ?", a: 2 },
+        {
+          q: "En quel mois peut-on avoir un poisson collé dans le dos ?",
+          a: 4,
+        },
+        { q: "Quand a lieu la rentrée des classes ?", a: 9 },
+        { q: "Quel est le premier mois de l'été ?", a: 6 },
+        { q: "Quel est le dernier mois de l'été ?", a: 8 },
+        { q: "Quel est le premier mois de l'automne ?", a: 9 },
+        { q: "Quel est le dernier mois de l'automne ?", a: 11 },
+        { q: "Quel est le premier mois de l'hiver ?", a: 12 },
+        { q: "Quel est le dernier mois de l'hiver ?", a: 2 },
+        { q: "Quel est le premier mois du printemps ?", a: 3 },
+        { q: "Quel est le dernier mois du printemps ?", a: 5 },
+      ];
+
+      let currentMode = "";
+      let selectedColorTool = null;
+      let score = 0;
+      let sortableInstances = [];
+
+      let currentQuizQueue = [];
+      let currentQuizIndex = 0;
+
+      window.onload = function () {
+        const savedScore = localStorage.getItem("baptiste_score");
+        if (savedScore) {
+          score = parseInt(savedScore);
+          updateScoreDisplay();
+        }
+      };
+
+      function updateScoreDisplay() {
+        document.getElementById("score-display").textContent = `🌟 ${score}`;
+      }
+
+      function speak(text) {
+        if ("speechSynthesis" in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = "fr-FR";
+          utterance.rate = 0.9;
+          utterance.pitch = 1.1;
+          window.speechSynthesis.speak(utterance);
+        }
+      }
+
+      function startGame(mode) {
+        currentMode = mode;
+        document.getElementById("menu-screen").style.display = "none";
+        document.getElementById("game-area").style.display = "flex";
+        document.getElementById("tools-bar").style.display = "flex";
+
+        const gameContent = document.getElementById("game-content");
+        gameContent.innerHTML = "";
+
+        sortableInstances.forEach((s) => s.destroy());
+        sortableInstances = [];
+
+        if (mode === "learn") setupLearnMode();
+        if (mode === "order") setupOrderGame();
+        if (mode === "color") setupColorGame();
+        if (mode === "write") setupWriteGame();
+        if (mode === "quiz") setupQuizGame();
+        if (mode === "birthday") setupBirthdayGame();
+      }
+
+      function returnToMenu() {
+        document.getElementById("menu-screen").style.display = "flex";
+        document.getElementById("game-area").style.display = "none";
+        document.getElementById("tools-bar").style.display = "none";
+        window.speechSynthesis.cancel();
+      }
+
+      function createCard(month) {
+        const div = document.createElement("div");
+        div.className = "month-card";
+        div.setAttribute("data-id", month.id);
+        div.setAttribute("data-season", month.season);
+
+        let iconHtml = month.customSvg
+          ? month.customSvg
+          : `<i class="${month.icon}"></i>`;
+        div.innerHTML = `${iconHtml}<div class="month-name">${month.name}</div>`;
+        return div;
+      }
+
+      // --- MODE 0 : Apprendre ---
+      function setupLearnMode() {
+        document.getElementById("instruction-text").textContent =
+          "Touche une carte pour écouter le mois.";
+        const grid = document.createElement("div");
+        grid.className = "months-grid";
+
+        monthsData.forEach((m) => {
+          const card = createCard(m);
+          card.classList.add(`style-${m.season}`, "learn-mode-card");
+          const soundIcon = document.createElement("i");
+          soundIcon.className = "fa-solid fa-volume-high audio-hint";
+          card.appendChild(soundIcon);
+          card.onclick = () => {
+            card.style.transform = "scale(0.95)";
+            setTimeout(() => (card.style.transform = "scale(1)"), 150);
+            speak(m.name);
+          };
+          grid.appendChild(card);
+        });
+        document.getElementById("game-content").appendChild(grid);
+
+        const toolsBar = document.getElementById("tools-bar");
+        toolsBar.innerHTML = `<button class="tool-btn btn-back" onclick="returnToMenu()"><i class="fa-solid fa-arrow-left"></i> Menu</button>`;
+      }
+
+      // --- JEU 1 : Ordre ---
+      function setupOrderGame() {
+        document.getElementById("instruction-text").textContent =
+          "Glisse chaque étiquette dans la case numérotée correspondante.";
+        const wrapper = document.createElement("div");
+        wrapper.className = "order-game-layout";
+
+        const slotsContainer = document.createElement("div");
+        slotsContainer.className = "slots-container";
+        for (let i = 1; i <= 12; i++) {
+          const slot = document.createElement("div");
+          slot.className = "slot-box number-bg";
+          slot.setAttribute("data-label", i);
+          slot.setAttribute("data-slot-id", i);
+          const sortable = new Sortable(slot, {
+            group: "months",
+            animation: 150,
+            ghostClass: "sortable-ghost",
+            put: (to) => to.el.children.length < 1,
+          });
+          sortableInstances.push(sortable);
+          slotsContainer.appendChild(slot);
+        }
+        wrapper.appendChild(slotsContainer);
+
+        const poolContainer = document.createElement("div");
+        poolContainer.className = "pool-container";
+        let shuffled = [...monthsData].sort(() => Math.random() - 0.5);
+        shuffled.forEach((m) => {
+          const card = createCard(m);
+          card.style.cursor = "grab";
+          card.classList.add("force-drag");
+          card.style.background = "white";
+          card.style.color = "#555";
+          poolContainer.appendChild(card);
+        });
+        const sortablePool = new Sortable(poolContainer, {
+          group: "months",
+          animation: 150,
+          ghostClass: "sortable-ghost",
+          touchStartThreshold: 5,
+          delay: 0,
+          onStart: function () {
+            if (navigator.vibrate) navigator.vibrate(20);
+          },
+        });
+        sortableInstances.push(sortablePool);
+
+        wrapper.appendChild(poolContainer);
+        document.getElementById("game-content").appendChild(wrapper);
+
+        setupValidationButton(validateOrder);
+      }
+
+      function validateOrder() {
+        const slots = document.querySelectorAll(".slot-box");
+        let errors = 0;
+        let empty = 0;
+        slots.forEach((slot) => {
+          const slotId = parseInt(slot.getAttribute("data-slot-id"));
+          const card = slot.firstElementChild;
+          if (card) {
+            const cardId = parseInt(card.getAttribute("data-id"));
+            if (cardId === slotId) {
+              card.classList.add("correct");
+              const season = card.getAttribute("data-season");
+              card.classList.add(`style-${season}`);
+            } else {
+              card.classList.add("wrong");
+              setTimeout(() => card.classList.remove("wrong"), 500);
+              errors++;
+            }
+          } else {
+            empty++;
+            errors++;
+          }
+        });
+        if (errors === 0) {
+          handleWin("order");
+        } else if (empty > 0) {
+          document.getElementById("instruction-text").textContent =
+            "Il reste des cases vides !";
+          setTimeout(
+            () =>
+              (document.getElementById("instruction-text").textContent =
+                "Glisse chaque étiquette dans la case numérotée correspondante."),
+            2000
+          );
+        }
+      }
+
+      // --- JEU 2 : Couleurs ---
+      function setupColorGame() {
+        document.getElementById("instruction-text").textContent =
+          "Choisis une saison en bas, puis colorie les mois.";
+        const grid = document.createElement("div");
+        grid.className = "months-grid";
+        let shuffled = [...monthsData].sort(() => Math.random() - 0.5);
+        shuffled.forEach((m) => {
+          const card = createCard(m);
+          card.classList.add("color-mode-neutral");
+          card.onclick = () => applyColor(card);
+          grid.appendChild(card);
+        });
+        document.getElementById("game-content").appendChild(grid);
+
+        const toolsBar = document.getElementById("tools-bar");
+        toolsBar.innerHTML = `<button class="tool-btn btn-back" onclick="returnToMenu()"><i class="fa-solid fa-arrow-left"></i></button>`;
+        Object.keys(seasons).forEach((key) => {
+          const s = seasons[key];
+          const btn = document.createElement("button");
+          btn.className = "tool-btn";
+          btn.style.backgroundColor = s.bg;
+          btn.style.color = s.color;
+          btn.innerHTML = `<i class="fa-solid fa-brush"></i><span>${s.name}</span>`;
+          btn.onclick = () => selectColorTool(key, btn);
+          toolsBar.appendChild(btn);
+        });
+        const validateBtn = document.createElement("button");
+        validateBtn.className = "tool-btn btn-validate";
+        validateBtn.innerHTML =
+          '<i class="fa-solid fa-check"></i><span>OK</span>';
+        validateBtn.onclick = validateColor;
+        toolsBar.appendChild(validateBtn);
+        selectColorTool("winter", toolsBar.children[1]);
+      }
+
+      function selectColorTool(seasonKey, btnElement) {
+        selectedColorTool = seasonKey;
+        document
+          .querySelectorAll(".tool-btn")
+          .forEach((b) => b.classList.remove("active"));
+        btnElement.classList.add("active");
+      }
+
+      function applyColor(card) {
+        if (!selectedColorTool) return;
+        card.classList.remove("color-mode-neutral");
+        card.classList.remove(
+          "style-winter",
+          "style-spring",
+          "style-summer",
+          "style-autumn"
+        );
+        card.classList.add(`style-${selectedColorTool}`);
+        card.setAttribute("data-user-choice", selectedColorTool);
+      }
+
+      function validateColor() {
+        const cards = document.querySelectorAll(".month-card");
+        let errors = 0;
+        cards.forEach((card) => {
+          const correct = card.getAttribute("data-season");
+          const userChoice = card.getAttribute("data-user-choice");
+          if (correct === userChoice) {
+            card.classList.add("correct");
+          } else {
+            card.classList.add("wrong");
+            setTimeout(() => card.classList.remove("wrong"), 500);
+            errors++;
+          }
+        });
+        if (errors === 0) handleWin("color");
+      }
+
+      // --- JEU 3 : Écriture ---
+      function setupWriteGame() {
+        document.getElementById("instruction-text").textContent =
+          "Écris le nom des mois disparus.";
+        const grid = document.createElement("div");
+        grid.className = "months-grid";
+        const hiddenIndices = [];
+        while (hiddenIndices.length < 4) {
+          let r = Math.floor(Math.random() * 12);
+          if (!hiddenIndices.includes(r)) hiddenIndices.push(r);
+        }
+        monthsData.forEach((m, index) => {
+          const card = createCard(m);
+          card.classList.add(`style-${m.season}`);
+          if (hiddenIndices.includes(index)) {
+            card.querySelector(".month-name").style.display = "none";
+            const input = document.createElement("input");
+            input.type = "text";
+            input.className = "input-month";
+            input.placeholder = "?";
+            input.autocomplete = "off";
+
+            // VALIDATION DIRECTE (Event Change)
+            input.addEventListener("change", function () {
+              const val = this.value.trim().toLowerCase();
+              const correct = m.name.toLowerCase();
+
+              // Reset classes
+              this.classList.remove("valid", "invalid");
+              this.classList.remove("wrong"); // Supprime animation shake précédente
+              void this.offsetWidth; // Trigger reflow pour rejouer anim si besoin
+
+              if (val === correct) {
+                this.classList.add("valid");
+                this.readOnly = true; // Verrouille
+                // Petit son de succès ? (optionnel)
+              } else if (val !== "") {
+                this.classList.add("invalid");
+              }
+            });
+
+            card.appendChild(input);
+          }
+          grid.appendChild(card);
+        });
+        document.getElementById("game-content").appendChild(grid);
+        setupValidationButton(validateWrite);
+      }
+
+      function validateWrite() {
+        const cards = document.querySelectorAll(".month-card");
+        let errors = 0;
+        let uncompleted = 0;
+
+        cards.forEach((card, index) => {
+          const input = card.querySelector("input");
+          if (input && input.style.display !== "none") {
+            // Check status based on class or re-evaluate
+            if (input.classList.contains("valid")) {
+              // Already good
+            } else {
+              // Not valid yet
+              const val = input.value.trim().toLowerCase();
+              const correct = monthsData[index].name.toLowerCase();
+
+              if (val === correct) {
+                input.classList.add("valid");
+                input.readOnly = true;
+              } else {
+                input.classList.add("invalid");
+                input.classList.add("wrong"); // Re-shake
+                setTimeout(() => input.classList.remove("wrong"), 500);
+                errors++;
+                if (val === "") uncompleted++;
+              }
+            }
+          }
+        });
+
+        if (errors === 0 && uncompleted === 0) {
+          handleWin("write");
+        } else {
+          if (errors > 0) speak("Il y a des erreurs.");
+          else if (uncompleted > 0) speak("Tu n'as pas tout fini.");
+        }
+      }
+
+      // --- JEU 4 : LE QUIZ ---
+      function setupQuizGame() {
+        let shuffledAll = [...allQuizQuestions].sort(() => Math.random() - 0.5);
+        currentQuizQueue = shuffledAll.slice(0, 10);
+        currentQuizIndex = 0;
+        showQuizQuestion();
+      }
+
+      function showQuizQuestion() {
+        const gameContent = document.getElementById("game-content");
+        gameContent.innerHTML = "";
+
+        const qData = currentQuizQueue[currentQuizIndex];
+        document.getElementById("instruction-text").textContent = `Question ${
+          currentQuizIndex + 1
+        }/10 : ${qData.q}`;
+        speak(qData.q);
+
+        const correctMonth = monthsData.find((m) => m.id === qData.a);
+        let options = [correctMonth];
+        while (options.length < 4) {
+          const randomM =
+            monthsData[Math.floor(Math.random() * monthsData.length)];
+          if (!options.includes(randomM)) options.push(randomM);
+        }
+        options.sort(() => Math.random() - 0.5);
+
+        const container = document.createElement("div");
+        container.className = "quiz-container";
+
+        options.forEach((opt) => {
+          const btn = document.createElement("div");
+          btn.className = "quiz-option";
+          btn.textContent = opt.name;
+          btn.onclick = () => {
+            if (
+              btn.classList.contains("correct") ||
+              btn.classList.contains("wrong")
+            )
+              return;
+            if (opt.id === qData.a) {
+              btn.classList.add("correct");
+              speak("Bonne réponse !");
+              handleQuizCorrect();
+            } else {
+              btn.classList.add("wrong");
+              speak("Mauvaise réponse");
+              setTimeout(() => btn.classList.remove("wrong"), 500);
+            }
+          };
+          container.appendChild(btn);
+        });
+        gameContent.appendChild(container);
+
+        const toolsBar = document.getElementById("tools-bar");
+        toolsBar.innerHTML = `<button class="tool-btn btn-back" onclick="returnToMenu()"><i class="fa-solid fa-arrow-left"></i></button>`;
+      }
+
+      function handleQuizCorrect() {
+        confetti({ particleCount: 50, spread: 50, origin: { y: 0.6 } });
+        const toolsBar = document.getElementById("tools-bar");
+        const isLast = currentQuizIndex === 9;
+        const btnText = isLast ? "TERMINER" : "SUIVANT";
+        const btnIcon = isLast ? "fa-flag-checkered" : "fa-arrow-right";
+
+        toolsBar.innerHTML = `
+                <button class="tool-btn btn-back" onclick="returnToMenu()"><i class="fa-solid fa-arrow-left"></i></button>
+                <button class="tool-btn btn-next" onclick="nextQuizStep()">
+                    <i class="fa-solid ${btnIcon}"></i>
+                    <span>${btnText}</span>
+                </button>
+            `;
+      }
+
+      function nextQuizStep() {
+        currentQuizIndex++;
+        if (currentQuizIndex < 10) {
+          showQuizQuestion();
+        } else {
+          handleWin("quiz");
+        }
+      }
+
+      // --- JEU 5 : ANNIVERSAIRES ---
+      function setupBirthdayGame() {
+        document.getElementById("instruction-text").textContent =
+          "Glisse la photo sur son mois d'anniversaire !";
+        const wrapper = document.createElement("div");
+        wrapper.className = "order-game-layout"; // Réutilise le layout du jeu d'ordre
+
+        // 1. Slots (Mois)
+        const slotsContainer = document.createElement("div");
+        slotsContainer.className = "slots-container";
+        monthsData.forEach((m) => {
+          const slot = document.createElement("div");
+          slot.className = "slot-box";
+          slot.setAttribute("data-label", m.name); // Nom du mois en fond
+          slot.setAttribute("data-month-id", m.id);
+
+          const sortable = new Sortable(slot, {
+            group: "birthdays",
+            animation: 150,
+            ghostClass: "sortable-ghost",
+            // On laisse mettre plusieurs items au cas où, mais le css n'est pas optimisé pour bcp
+            put: true,
+          });
+          sortableInstances.push(sortable);
+          slotsContainer.appendChild(slot);
+        });
+        wrapper.appendChild(slotsContainer);
+
+        // 2. Pioche (Photos)
+        const poolContainer = document.createElement("div");
+        poolContainer.className = "pool-container";
+
+        let shuffled = [...birthdaysData].sort(() => Math.random() - 0.5);
+        shuffled.forEach((person) => {
+          const token = document.createElement("div");
+          token.className = "birthday-token";
+          token.setAttribute("data-target-month", person.monthId);
+
+          // Image
+          const img = document.createElement("img");
+          img.src = person.img;
+          img.alt = person.name;
+
+          // Fallback si erreur image
+          img.onerror = function () {
+            this.style.display = "none";
+            this.parentElement.textContent = person.name;
+            this.parentElement.style.backgroundColor = "#ccc";
+          };
+
+          token.appendChild(img);
+
+          poolContainer.appendChild(token);
+        });
+
+        const sortablePool = new Sortable(poolContainer, {
+          group: "birthdays",
+          animation: 150,
+          ghostClass: "sortable-ghost",
+          touchStartThreshold: 5,
+          delay: 0,
+        });
+        sortableInstances.push(sortablePool);
+
+        wrapper.appendChild(poolContainer);
+        document.getElementById("game-content").appendChild(wrapper);
+
+        setupValidationButton(validateBirthday);
+      }
+
+      function validateBirthday() {
+        const slots = document.querySelectorAll(".slot-box");
+        let errors = 0;
+        let placed = 0;
+
+        slots.forEach((slot) => {
+          const slotMonthId = parseInt(slot.getAttribute("data-month-id"));
+          // Il peut y avoir plusieurs enfants dans le slot (si jamais)
+          const tokens = slot.querySelectorAll(".birthday-token");
+
+          tokens.forEach((token) => {
+            placed++;
+            const targetId = parseInt(token.getAttribute("data-target-month"));
+            if (targetId === slotMonthId) {
+              // Correct
+              token.style.borderColor = "#2ecc71";
+              token.style.boxShadow = "0 0 10px #2ecc71";
+            } else {
+              // Faux
+              token.style.borderColor = "#e74c3c";
+              token.style.boxShadow = "0 0 10px #e74c3c";
+              errors++;
+            }
+          });
+        });
+
+        // On vérifie qu'on a tout placé
+        const totalToPlace = birthdaysData.length;
+
+        if (placed === totalToPlace && errors === 0) {
+          handleWin("birthday");
+        } else if (placed < totalToPlace) {
+          document.getElementById("instruction-text").textContent =
+            "Il reste des photos à placer !";
+          setTimeout(
+            () =>
+              (document.getElementById("instruction-text").textContent =
+                "Glisse la photo sur son mois d'anniversaire !"),
+            2000
+          );
+        }
+      }
+
+      function setupValidationButton(fn) {
+        const toolsBar = document.getElementById("tools-bar");
+        toolsBar.innerHTML = `
+                <button class="tool-btn btn-back" onclick="returnToMenu()"><i class="fa-solid fa-arrow-left"></i></button>
+                <button class="tool-btn btn-validate" id="validate-btn" onclick="applyValidation()">VÉRIFIER</button>
+            `;
+        window.applyValidation = fn;
+      }
+
+      function handleWin(mode) {
+        score += 10;
+        localStorage.setItem("baptiste_score", score);
+        updateScoreDisplay();
+
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+        if (mode === "write") {
+          speak("Bonne réponse ! Bravo !");
+        } else {
+          speak("Bravo, c'est gagné !");
+        }
+
+        const toolsBar = document.getElementById("tools-bar");
+        document.getElementById("instruction-text").textContent =
+          "BRAVO BAPTISTE ! 🎉";
+
+        toolsBar.innerHTML = `
+                <button class="tool-btn btn-back" onclick="returnToMenu()">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <button class="tool-btn btn-replay" onclick="startGame('${mode}')">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span>REJOUER</span>
+                </button>
+            `;
+      }
+    </script>
+  </body>
+</html>
