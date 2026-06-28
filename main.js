@@ -63,10 +63,12 @@ function renderProjects(filter = 'all') {
     }
 
     card.innerHTML = `
-      <div class="icon">${project.icon}</div>
-      <h2>${project.title}</h2>
-      <p>${project.description}</p>
-      <span class="category">${project.categoryLabel}</span>
+      <div class="arc-content">
+        <div class="icon">${project.icon}</div>
+        <h2>${project.title}</h2>
+        <p>${project.description}</p>
+        <span class="category">${project.categoryLabel}</span>
+      </div>
     `;
 
     grid.appendChild(card);

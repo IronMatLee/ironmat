@@ -145,52 +145,61 @@ header p {
 }
 
 .project-card {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius);
-  padding: 2rem;
+  background: rgba(6, 182, 212, 0.4);
+  clip-path: polygon(20% 0, 80% 0, 100% 25%, 50% 100%, 0 25%);
+  filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.3));
+  padding: 2px;
   text-decoration: none;
   color: inherit;
   transition: var(--transition);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: var(--glass-shadow);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+  display: block;
+  height: 350px;
 }
 
 .project-card:hover {
   transform: translateY(-10px);
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 0 25px rgba(6, 182, 212, 0.8));
 }
 
-.project-card .icon {
+.arc-content {
+  background: radial-gradient(circle at 50% 30%, rgba(6, 182, 212, 0.15) 0%, rgba(13, 5, 5, 0.95) 70%);
+  clip-path: polygon(20% 0, 80% 0, 100% 25%, 50% 100%, 0 25%);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 1.5rem 4rem 1.5rem;
+}
+
+.arc-content .icon {
   font-size: 3rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.5));
 }
 
-.project-card h2 {
-  font-size: 1.5rem;
+.arc-content h2 {
+  font-size: 1.4rem;
   margin-bottom: 0.5rem;
 }
 
-.project-card p {
+.arc-content p {
   color: var(--text-muted);
-  font-size: 1rem;
-  line-height: 1.5;
+  font-size: 0.95rem;
+  line-height: 1.4;
   flex-grow: 1;
 }
 
-.project-card .category {
+.arc-content .category {
   display: inline-block;
-  margin-top: 1.5rem;
-  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: var(--secondary-color);
-  font-weight: 600;
+  color: #06b6d4;
+  font-weight: 800;
+  text-shadow: 0 0 8px rgba(6, 182, 212, 0.5);
 }
 
 footer {
