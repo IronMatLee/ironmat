@@ -93,7 +93,7 @@ header h1 {
   font-size: 3.5rem;
   font-weight: 800;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #E62429, #F5C518);
+  background: linear-gradient(135deg, #990000 0%, #e60000 35%, #facc15 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -132,7 +132,7 @@ header p {
 }
 
 .filter-btn.active {
-  background: linear-gradient(135deg, #E62429, #F5C518);
+  background: linear-gradient(135deg, #990000 0%, #e60000 35%, #facc15 100%);
   border-color: transparent;
   box-shadow: 0 4px 15px rgba(230, 36, 41, 0.4);
 }
