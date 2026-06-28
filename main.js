@@ -68,6 +68,7 @@ function renderProjects(filter = 'all') {
         <h2>${project.title}</h2>
         <p>${project.description}</p>
         <span class="category">${project.categoryLabel}</span>
+        <div class="card-cta">DÉCOUVRIR</div>
       </div>
     `;
 
