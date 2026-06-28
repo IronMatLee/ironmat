@@ -93,7 +93,7 @@ header h1 {
   font-size: 3.5rem;
   font-weight: 800;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #990000 0%, #e60000 35%, #facc15 100%);
+  background: linear-gradient(135deg, #a71d2a, #4a0404);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -132,9 +132,9 @@ header p {
 }
 
 .filter-btn.active {
-  background: linear-gradient(135deg, #990000 0%, #e60000 35%, #facc15 100%);
+  background: linear-gradient(135deg, #d4af37, #664d00);
   border-color: transparent;
-  box-shadow: 0 4px 15px rgba(230, 36, 41, 0.4);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
 }
 
 .projects-grid {
