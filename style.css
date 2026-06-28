@@ -132,9 +132,9 @@ header p {
 }
 
 .filter-btn.active {
-  background: linear-gradient(135deg, #d4af37, #664d00);
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
   border-color: transparent;
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.5);
 }
 
 .projects-grid {
@@ -145,80 +145,50 @@ header p {
 }
 
 .project-card {
-  background: rgba(6, 182, 212, 0.4);
-  clip-path: polygon(2% 13%, 0% 15%, 2% 17%, 18% 2%, 20% 0%, 22% 2%, 33% 10%, 35% 12%, 37% 12%, 63% 12%, 65% 12%, 67% 10%, 78% 2%, 80% 0%, 82% 2%, 98% 13%, 100% 15%, 98% 17%, 67% 98%, 65% 100%, 63% 100%, 37% 100%, 35% 100%, 33% 98%);
-  filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.3));
-  padding: 2px;
+  background: radial-gradient(circle at top left, #8B1919, #4A0D0D);
+  border: 1px solid #846214;
+  border-radius: var(--radius);
+  padding: 2rem;
   text-decoration: none;
   color: inherit;
   transition: var(--transition);
-  display: block;
-  height: 350px;
+  box-shadow: var(--glass-shadow);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .project-card:hover {
   transform: translateY(-10px);
-  background: #06b6d4;
-  filter: drop-shadow(0 0 25px rgba(6, 182, 212, 1));
+  border-color: #D4AF37;
+  box-shadow: 0 15px 40px rgba(116, 21, 21, 0.6);
 }
 
-.project-card:hover .card-cta {
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.7);
-}
-
-.arc-content {
-  background: radial-gradient(circle at 50% 30%, rgba(6, 182, 212, 0.15) 0%, rgba(13, 5, 5, 0.95) 70%);
-  clip-path: polygon(2% 13%, 0% 15%, 2% 17%, 18% 2%, 20% 0%, 22% 2%, 33% 10%, 35% 12%, 37% 12%, 63% 12%, 65% 12%, 67% 10%, 78% 2%, 80% 0%, 82% 2%, 98% 13%, 100% 15%, 98% 17%, 67% 98%, 65% 100%, 63% 100%, 37% 100%, 35% 100%, 33% 98%);
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 3rem 2.5rem 4rem 2.5rem;
-}
-
-.arc-content .icon {
+.project-card .icon {
   font-size: 3rem;
-  margin-bottom: 0.5rem;
-  filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.5));
+  margin-bottom: 1rem;
 }
 
-.arc-content h2 {
-  font-size: 1.4rem;
+.project-card h2 {
+  font-size: 1.5rem;
   margin-bottom: 0.5rem;
 }
 
-.arc-content p {
+.project-card p {
   color: var(--text-muted);
-  font-size: 0.95rem;
-  line-height: 1.4;
+  font-size: 1rem;
+  line-height: 1.5;
   flex-grow: 1;
 }
 
-.arc-content .category {
+.project-card .category {
   display: inline-block;
-  margin-top: 0.5rem;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #06b6d4;
-  font-weight: 800;
-  text-shadow: 0 0 8px rgba(6, 182, 212, 0.5);
-}
-
-.card-cta {
-  margin-top: auto;
+  margin-top: 1.5rem;
   font-size: 0.8rem;
-  font-weight: 800;
-  color: #0d0505;
-  background: linear-gradient(135deg, #d4af37, #664d00);
-  padding: 0.5rem 1.5rem;
-  border-radius: 999px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 0 4px 10px rgba(212, 175, 55, 0.4);
-  transition: var(--transition);
+  color: #fbbf24;
+  font-weight: 600;
 }
 
 footer {
