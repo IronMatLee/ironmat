@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  ironmat-hub:
+    build: .
+    container_name: ironmat-hub
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      # La clé Gemini sera lue depuis le .env au niveau du docker-compose
+    env_file:
+      - .env

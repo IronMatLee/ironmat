@@ -27,24 +27,6 @@ const projects = [
     category: "scolaire",
     categoryLabel: "Jeux Scolaires",
     url: "/mois-annee/"
-  },
-  {
-    id: 4,
-    title: "Donde Estas",
-    description: "Un jeu classique de cache-cache ou de repérage spatial.",
-    icon: "🕵️‍♂️",
-    category: "classique",
-    categoryLabel: "Jeux Classiques",
-    url: "/donde-estas/"
-  },
-  {
-    id: 5,
-    title: "Test Node.js Vercel",
-    description: "Exemple de mon futur labo Node.js hébergé sur une plateforme cloud (lien à venir).",
-    icon: "⚡",
-    category: "test",
-    categoryLabel: "Tests & Labo",
-    url: "#"
   }
 ];
 
@@ -58,6 +40,8 @@ function renderProjects(filter = 'all') {
     const card = document.createElement('a');
     card.href = project.url;
     card.className = 'project-card';
+    card.target = '_blank';
+    card.rel = 'noopener noreferrer';
     if(project.url === '#') {
       card.onclick = (e) => { e.preventDefault(); alert("Ce test n'est pas encore en ligne !"); };
     }
