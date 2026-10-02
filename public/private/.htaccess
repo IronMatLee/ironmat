@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Accès Restreint - Espace Privé"
+AuthUserFile /home/ironmab/www/private/.htpasswd
+Require valid-user
